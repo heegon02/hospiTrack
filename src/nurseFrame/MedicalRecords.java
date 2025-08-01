@@ -38,7 +38,8 @@ public class MedicalRecords extends VBox {
         this.setSpacing(10);
         this.setPadding(new Insets(15));
         this.setAlignment(Pos.TOP_LEFT);
-        this.setMinSize(400, 740);
+        this.setMinSize(350, 815);
+        this.setMaxSize(350, 815);
         
         
     }

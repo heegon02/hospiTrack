@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="doctorFrame.DoctorFrameController"
+      prefHeight="800.0" prefWidth="1200.0" spacing="10" style="-fx-background-color: #f5f5f5;">
+    
+    <!-- 상단 헤더 -->
+    <HBox alignment="CENTER_LEFT" style="-fx-background-color: #4CAF50; -fx-padding: 10;">
+        <Text fx:id="programNameText" fill="WHITE" style="-fx-font-size: 20; -fx-font-weight: bold;"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Text fx:id="userInfoText" fill="WHITE" style="-fx-font-size: 16;"/>
+    </HBox>
+    
+    <!-- 메인 컨텐츠 -->
+    <HBox spacing="10" VBox.vgrow="ALWAYS">
+        
+        <!-- 좌측 사이드바 -->
+        <VBox style="-fx-background-color: #f0f0f0; -fx-padding: 10;" prefWidth="200">
+            <Text text="의사 Frame" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+            <VBox spacing="10" style="-fx-padding: 10;">
+                <Button text="진료" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                <Button text="환자 관리" style="-fx-background-color: #2196F3; -fx-text-fill: white;"/>
+                <Button text="통계" style="-fx-background-color: #FF9800; -fx-text-fill: white;"/>
+            </VBox>
+        </VBox>
+        
+        <!-- 메인 컨텐츠 영역 -->
+        <HBox spacing="10" HBox.hgrow="ALWAYS">
+            
+            <!-- 1. 환자 접수 순서 -->
+            <VBox HBox.hgrow="ALWAYS" style="-fx-background-color: white; -fx-padding: 10; -fx-border-color: gray;">
+                <HBox alignment="CENTER_LEFT">
+                    <Text text="오늘의 환자 접수 순서" style="-fx-font-size: 14; -fx-font-weight: bold;"/>
+                    <Text fx:id="queueCountText" text="0" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: red;"/>
+                </HBox>
+                <ScrollPane VBox.vgrow="ALWAYS" fitToWidth="true">
+                    <VBox fx:id="patientQueueVBox" spacing="5"/>
+                </ScrollPane>
+            </VBox>
+            
+            <!-- 2. 환자 정보 및 진료 기록 -->
+            <VBox HBox.hgrow="ALWAYS" spacing="10">
+                <!-- 환자 기본 정보 -->
+                <VBox style="-fx-background-color: white; -fx-padding: 10; -fx-border-color: gray;" VBox.vgrow="ALWAYS">
+                    <Text text="환자 기본 정보" style="-fx-font-size: 14; -fx-font-weight: bold;"/>
+                    <GridPane hgap="5" vgap="5" style="-fx-padding: 10;">
+                        <Label text="이름:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                        <TextField fx:id="patientNameField" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                        
+                        <Label text="성별:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                        <TextField fx:id="patientGenderField" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                        
+                        <Label text="생년월일:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                        <TextField fx:id="patientBirthField" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                        
+                        <Label text="나이:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                        <TextField fx:id="patientAgeField" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                        
+                        <Label text="키:" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+                        <TextField fx:id="patientHeightField" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+                        
+                        <Label text="몸무게:" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+                        <TextField fx:id="patientWeightField" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+                        
+                        <Label text="혈액형:" GridPane.columnIndex="0" GridPane.rowIndex="6"/>
+                        <TextField fx:id="patientBloodTypeField" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+                    </GridPane>
+                </VBox>
+                
+                <!-- 환자 진료 기록 -->
+                <VBox style="-fx-background-color: white; -fx-padding: 10; -fx-border-color: gray;" VBox.vgrow="ALWAYS">
+                    <Text text="환자 진료 기록" style="-fx-font-size: 14; -fx-font-weight: bold;"/>
+                    <Button fx:id="addRecordButton" text="+" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+                    <ScrollPane VBox.vgrow="ALWAYS" fitToWidth="true">
+                        <VBox fx:id="medicalRecordsVBox" spacing="5"/>
+                    </ScrollPane>
+                </VBox>
+            </VBox>
+            
+            <!-- 3. 의사 처방 내역 -->
+            <VBox HBox.hgrow="ALWAYS" style="-fx-background-color: white; -fx-padding: 10; -fx-border-color: gray;">
+                <Text text="의사 처방 내역" style="-fx-font-size: 14; -fx-font-weight: bold;"/>
+                <VBox spacing="10" VBox.vgrow="ALWAYS">
+                    <VBox spacing="5">
+                        <Label text="제약 및 주사:"/>
+                        <TextArea fx:id="medicationArea" prefRowCount="5" promptText="처방된 약물 및 주사 정보"/>
+                    </VBox>
+                    <VBox spacing="5">
+                        <Label text="환자 증상 및 기타 메모:"/>
+                        <TextArea fx:id="symptomsArea" prefRowCount="5" promptText="환자 증상 및 메모"/>
+                    </VBox>
+                    <VBox spacing="5">
+                        <Label text="소견서:"/>
+                        <TextArea fx:id="opinionArea" prefRowCount="5" promptText="의사 소견"/>
+                    </VBox>
+                    <Button fx:id="completeTreatmentButton" text="진료 완료" 
+                            style="-fx-background-color: #f44336; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                </VBox>
+            </VBox>
+            
+            <!-- 4. 처방 및 간호사 메모 -->
+            <VBox HBox.hgrow="ALWAYS" spacing="10">
+                <!-- 처방 입력 -->
+                <VBox style="-fx-background-color: white; -fx-padding: 10; -fx-border-color: gray;" VBox.vgrow="ALWAYS">
+                    <Text text="처방" style="-fx-font-size: 14; -fx-font-weight: bold;"/>
+                    <VBox spacing="10">
+                        <HBox spacing="5">
+                            <Label text="진단명:"/>
+                            <ComboBox fx:id="diagnosisComboBox" promptText="진단명 선택" HBox.hgrow="ALWAYS"/>
+                        </HBox>
+                        <HBox spacing="5">
+                            <Label text="진단코드:"/>
+                            <TextField fx:id="diagnosisCodeField" HBox.hgrow="ALWAYS"/>
+                        </HBox>
+                        
+                        <Separator/>
+                        
+                        <Label text="약:"/>
+                        <HBox spacing="5">
+                            <ComboBox fx:id="medicationComboBox" promptText="약물 선택" HBox.hgrow="ALWAYS"/>
+                            <Button text="검색"/>
+                        </HBox>
+                        <HBox spacing="5">
+                            <Label text="일일 투약 횟수:"/>
+                            <TextField fx:id="dailyDosageField" HBox.hgrow="ALWAYS"/>
+                        </HBox>
+                        <HBox spacing="5">
+                            <Label text="총 투약 일수:"/>
+                            <TextField fx:id="totalDaysField" HBox.hgrow="ALWAYS"/>
+                        </HBox>
+                        
+                        <Separator/>
+                        
+                        <Label text="주사:"/>
+                        <HBox spacing="5">
+                            <ComboBox fx:id="injectionComboBox" promptText="주사 선택" HBox.hgrow="ALWAYS"/>
+                            <Button text="검색"/>
+                        </HBox>
+                        
+                        <Button fx:id="enterButton" text="Enter" 
+                                style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                    </VBox>
+                </VBox>
+                
+                <!-- 간호사 메모 -->
+                <VBox style="-fx-background-color: white; -fx-padding: 10; -fx-border-color: gray;" VBox.vgrow="ALWAYS">
+                    <Text text="간호사 메모" style="-fx-font-size: 14; -fx-font-weight: bold;"/>
+                    <VBox spacing="10" VBox.vgrow="ALWAYS">
+                        <VBox spacing="5">
+                            <Label text="간호사 메모:"/>
+                            <TextArea fx:id="nurseMemoArea" prefRowCount="4" promptText="간호사로부터 온 메시지"/>
+                        </VBox>
+                        <VBox spacing="5">
+                            <HBox spacing="5" alignment="CENTER_LEFT">
+                                <Label text="간호사에게 전송:"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Button fx:id="sendToNurseButton" text="전송" 
+                                        style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
+                            </HBox>
+                            <TextArea fx:id="sendToNurseArea" prefRowCount="4" promptText="간호사에게 보낼 메시지"/>
+                        </VBox>
+                    </VBox>
+                </VBox>
+            </VBox>
+            
+        </HBox>
+    </HBox>
+    
+</VBox> 
