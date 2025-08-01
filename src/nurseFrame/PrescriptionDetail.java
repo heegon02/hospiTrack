@@ -81,7 +81,9 @@ public class PrescriptionDetail extends VBox {
             opinionLabel, opinionField
         );
 		
-		this.setPrefSize(280, 700);
+		this.setPrefSize(300, 600);
+		this.setMinSize(300, 600);
+		this.setMaxSize(300, 600);
 	}
 	
 	
