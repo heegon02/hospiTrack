@@ -7,8 +7,13 @@
 module hospiTrack {
 	requires javafx.controls;
 	requires javafx.fxml;
-	requires java.sql;
 	requires javafx.graphics;
+	requires javafx.web;
+	
+	requires java.sql;
+	requires java.desktop;
+	
+	requires itextpdf;
 	
 	exports application;
 	exports nurseFrame;

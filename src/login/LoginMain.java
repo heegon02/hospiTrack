@@ -38,32 +38,92 @@ public class LoginMain {
 		loginUI.setTitle("로그인");
 		
 		//프로그램 이름
-		Label titleLabel = new Label("1인 의사를 위한 병원 내부 환자 데이터 관리 시스템");
+		Label titleLabel = new Label("HospiTrack\n\n\n");
+		titleLabel.setStyle(
+			"-fx-font-family: '돋움';" + 
+			"-fx-font-size: 30px;"	
+		);
+		HBox titleLine = new HBox();
+		titleLine.setAlignment(Pos.CENTER);
+		titleLine.getChildren().add(titleLabel);
 		
 		//모드 변경 버튼
+		HBox modeLine = new HBox(20);
 		IOSToggleSwitch modeButton = new IOSToggleSwitch();
-		
+		modeLine.setAlignment(Pos.CENTER);
+		modeLine.getChildren().add(modeButton);
 		
 		//아이디라인
 		HBox idLine = new HBox(20);
-		Label idLabel = new Label("ID");
+		idLine.setAlignment(Pos.CENTER);
+		Label idLabel = new Label(" I D");
+		idLabel.setStyle(
+			"-fx-font-family: 'Arial';" + 
+			"-fx-font-size: 27;"
+		);
 		TextField idTextField = new TextField();
+		idTextField.setStyle(
+			"-fx-min-height: 30;" + 
+			"-fx-min-width: 100;"
+		);
 		idLine.getChildren().addAll(idLabel, idTextField);
 		
 		//패스워드라인
 		HBox passwordLine = new HBox(20);
+		passwordLine.setAlignment(Pos.CENTER);
 		Label passwordLabel = new Label("PW");
+		passwordLabel.setStyle(
+				"-fx-font-family: 'Arial';" + 
+				"-fx-font-size: 27;"
+			);
 		TextField passwordTextField = new TextField();
+		passwordTextField.setStyle(
+				"-fx-min-height: 30;" + 
+				"-fx-min-width: 100;"
+			);
 		passwordLine.getChildren().addAll(passwordLabel, passwordTextField);
 		
 		//로그인버튼
 		Button loginButton = new Button("Login");
+		loginButton.setStyle(
+			    "-fx-background-color: linear-gradient(to right, #4facfe, #00f2fe);" +
+			    "-fx-text-fill: white;" +                
+			    "-fx-font-size: 14px;" +                
+			    "-fx-font-weight: bold;" +               
+			    "-fx-background-radius: 20;" +           
+			    "-fx-padding: 10 30 10 30;" +            
+			    "-fx-cursor: hand;"                     
+			);
+
+			// Hover 시 효과
+		loginButton.setOnMouseEntered(e -> loginButton.setStyle(
+			    "-fx-background-color: linear-gradient(to right, #00f2fe, #4facfe);" + 
+			    "-fx-text-fill: white;" +
+			    "-fx-font-size: 14px;" +
+			    "-fx-font-weight: bold;" +
+			    "-fx-background-radius: 20;" +
+			    "-fx-padding: 10 30 10 30;" +
+			    "-fx-cursor: hand;" +
+			    "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 6, 0, 0, 2);" 
+			));
+
+			// Hover 벗어났을 때 원래대로
+		loginButton.setOnMouseExited(e -> loginButton.setStyle(
+			    "-fx-background-color: linear-gradient(to right, #4facfe, #00f2fe);" +
+			    "-fx-text-fill: white;" +
+			    "-fx-font-size: 14px;" +
+			    "-fx-font-weight: bold;" +
+			    "-fx-background-radius: 20;" +
+			    "-fx-padding: 10 30 10 30;" +
+			    "-fx-cursor: hand;"
+			));
+		
 		//로그인버튼 이벤트처리 -> id, pw 변수에 저장.
 		loginButton.setOnAction(e -> {
-            id = idTextField.getText();   
+            id = idTextField.getText();
             pw = passwordTextField.getText();
             mode = modeButton.doctorModeProperty().get() ? "DOCTOR" : "NURSE";
-            LoginDAO loginDAO = new LoginDAO();  
+            LoginDAO loginDAO = new LoginDAO();
             LoginDAO.User user = loginDAO.login(id, pw, mode);
             
             if (user != null) {
@@ -75,7 +135,7 @@ public class LoginMain {
 
                 if ("NURSE".equals(user.getRole())) {
                     try {
-                        new nurseFrame.NurseFrame().start(new Stage());
+                        new nurseFrame.NurseFrame(user).start(new Stage());
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -96,24 +156,28 @@ public class LoginMain {
             
         });
 		
+		HBox loginLine = new HBox();
+		loginLine.setAlignment(Pos.CENTER);
+		loginLine.getChildren().add(loginButton);
+		
 		//직원정보수정 전화번호 라벨
-	    Label underLabel = new Label("직원 정보 수정은 00-000-0000으로 전화주세요");
+	    Label underLabel = new Label("\n\n직원 정보 수정은 00-000-0000으로 전화주세요");
+	    HBox underLine = new HBox();
+	    underLine.setAlignment(Pos.CENTER);
+	    underLine.getChildren().add(underLabel);
 	    
 	    
 	    // 전체 레이아웃
         VBox root = new VBox(15);
-        root.getChildren().addAll(titleLabel, modeButton, idLine, passwordLine, loginButton, underLabel);
-
-        loginUI.setScene(new Scene(root, 400, 300));
+        root.getChildren().addAll(titleLine, modeLine, idLine, passwordLine, loginLine, underLine);
+        
+        loginUI.setScene(new Scene(root, 300, 400));
         loginUI.show();
 
 	}
 	
 	
-	
-	
-
-
+	//간호사, 의사 모드 변경 버튼.
 	public class IOSToggleSwitch extends HBox {
 
 	    private final BooleanProperty isDoctorMode = new SimpleBooleanProperty(true);
@@ -123,8 +187,18 @@ public class LoginMain {
 	    private final Circle knob = new Circle(18);
 
 	    public IOSToggleSwitch() {
-	        this.setMinSize(100, 40);
-	        this.setMaxSize(100, 40);
+	    	// Hover 시 그림자 효과
+	    	this.setOnMouseEntered(e -> {
+	    	    this.setStyle(this.getStyle() + 
+	    	        "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.25), 8, 0, 0, 3);");
+	    	});
+	    	this.setOnMouseExited(e -> {
+	    	    this.setStyle(this.getStyle().replaceAll("-fx-effect:.*?;", ""));
+	    	});
+	    	
+	    	
+	        this.setMinSize(90, 40);
+	        this.setMaxSize(90, 40);
 	        this.setStyle("-fx-background-color: #4cd964; -fx-background-radius: 20;");
 	        this.setAlignment(Pos.CENTER);
 
@@ -158,7 +232,12 @@ public class LoginMain {
 	        if (isDoctorMode.get()) {
 	            // 간호사 모드
 	            isDoctorMode.set(false);
-	            this.setStyle("-fx-background-color: #dddddd; -fx-background-radius: 20;");
+	            this.setStyle(
+	            		"-fx-background-color: #87CEEB;" +
+	            		"-fx-background-radius: 20;" + 
+	            		"-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.25), 8, 0, 0, 3);"
+	            );
+	            
 
 	            doctorLabel.setStyle("-fx-text-fill: gray; -fx-font-weight: bold;");
 	            nurseLabel.setStyle("-fx-text-fill: black; -fx-font-weight: bold;");
@@ -172,7 +251,11 @@ public class LoginMain {
 	        } else {
 	            // 의사 모드
 	            isDoctorMode.set(true);
-	            this.setStyle("-fx-background-color: #4cd964; -fx-background-radius: 20;");
+	            this.setStyle(
+	            		"-fx-background-color: #4cd964;"+ 
+	            		"-fx-background-radius: 20;" + 
+	            		"-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.25), 8, 0, 0, 3);"
+	            );
 
 	            doctorLabel.setStyle("-fx-text-fill: white; -fx-font-weight: bold;");
 	            nurseLabel.setStyle("-fx-text-fill: gray; -fx-font-weight: bold;");

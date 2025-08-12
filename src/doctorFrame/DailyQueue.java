@@ -8,14 +8,16 @@ public class DailyQueue {
     private String patientName;
     private LocalDateTime registrationTime;
     private String status; // "대기", "진료중", "완료"
+    private int appointmentId;
     
     public DailyQueue(int id, int patientId, String patientName, 
-                     LocalDateTime registrationTime, String status) {
+                     LocalDateTime registrationTime, String status, int appointmentId) {
         this.id = id;
         this.patientId = patientId;
         this.patientName = patientName;
         this.registrationTime = registrationTime;
         this.status = status;
+        this.appointmentId = appointmentId;
     }
     
     // Getters and Setters
@@ -35,4 +37,8 @@ public class DailyQueue {
     
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
+    
+    public int getAppointmentId() {return appointmentId; }
+    public void setAppointmentId(int appointmentId) {this.appointmentId = appointmentId; }
+
 } 

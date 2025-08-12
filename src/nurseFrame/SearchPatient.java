@@ -32,6 +32,10 @@ public class SearchPatient extends VBox {
     public void setOnPatientSelected(PatientSelectedListener listener) {
         this.listener = listener;
     }
+    
+    public void setNameField(String name) {
+        nameField.setText(name);
+    }
 
     public SearchPatient() {
         this.setSpacing(10);
@@ -90,6 +94,9 @@ public class SearchPatient extends VBox {
                     	memo.setPatientId(selectedPatientId);
                     }
                     
+                    if (medicalRecords != null) {
+                    	medicalRecords.setPatientId(selectedPatientId);
+                    }
 
                     if (prescriptionDetail != null) {
                         prescriptionDetail.setPatientId(selectedPatientId);
@@ -105,7 +112,7 @@ public class SearchPatient extends VBox {
     		"-fx-background-radius: 15;" + //배경 둥글게
     		"-fx-border-radius: 15;" + //테두리도 같이 둥글게
     		"-fx-border-color: lightgray;" //테두리 색
-    	); 
+    	);
         
         this.getChildren().addAll(titleLabel, searchBox, tableView);
     }
@@ -128,7 +135,7 @@ public class SearchPatient extends VBox {
     
 
     // 검색 메소드
-    private void searchPatients() {
+    public void searchPatients() {
         String name = nameField.getText().trim();
         if (name.isEmpty()) {
             return;
