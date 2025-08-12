@@ -17,6 +17,11 @@ import javafx.stage.Stage;
 public class NewPatientAddButton extends HBox {
 	
     private Button newPatientAddButton;
+    private SearchPatient searchPatient;
+    
+    public void setSearchPatient(SearchPatient searchPatient) {
+    	this.searchPatient = searchPatient;
+    }
 
     public NewPatientAddButton() {
         // 버튼 생성
@@ -75,6 +80,11 @@ public class NewPatientAddButton extends HBox {
 
                     // DB 저장
                     PatientDAO.addPatient(newPatient);
+                    
+                    if (searchPatient != null) {
+                    	searchPatient.setNameField(name);
+                    	searchPatient.searchPatients();
+                    }
 
                     Alert success = new Alert(Alert.AlertType.INFORMATION);
                     success.setTitle("성공");

@@ -60,15 +60,46 @@ public class PatientInfoPanel extends VBox {
         bloodTypeBox = new ComboBox<>();
         bloodTypeBox.getItems().addAll("A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-");
         birthDatePicker = new DatePicker();
+        birthDatePicker.setEditable(false);
+        birthDatePicker.setDisable(true);
         phoneField = new TextField();
         genderBox = new ComboBox<>();
         genderBox.getItems().addAll("M", "F");
 
         updateButton = new Button("정보 수정");
         updateButton.setPadding(new Insets(10, 30, 10, 30));
+        
+        updateButton.setStyle(
+        		"-fx-border-color: transparent;"
+        );
 
         receptionButton = new Button("진료 접수");
         receptionButton.setPadding(new Insets(10, 30, 10, 30));
+        
+        receptionButton.setStyle(
+        		"-fx-border-color: transparent;" + 
+        		"-fx-background-color: skyblue;" +
+        		"-fx-text-fill: white;"
+        );
+        
+        receptionButton.setOnMouseEntered(e-> receptionButton.setStyle(
+        		"-fx-border-color: transparent;" + 
+                		"-fx-background-color: skyblue;" +
+                		"-fx-text-fill: white;" + 
+                		"-fx-effect : dropshadow(three-pass-box, rgba(0,0,0,0.3), 6, 0, 0, 2);"
+        		
+        ));
+        
+        receptionButton.setOnMouseExited(e -> receptionButton.setStyle(
+        		"-fx-border-color: transparent;" + 
+                		"-fx-background-color: skyblue;" +
+                		"-fx-text-fill: white;"
+        
+        ));
+        
+        
+        
+        
 
         HBox underTwoHBox = new HBox(10, updateButton, receptionButton);
 
@@ -160,20 +191,20 @@ public class PatientInfoPanel extends VBox {
         }
 
         try {
-            // 1. DB에 접수 등록
-            AppointmentDAO.registerAppointment(currentPatientId);
+        	boolean result = AppointmentDAO.registerAppointment(currentPatientId);
 
-         // UI 갱신 (JavaFX Application Thread 보장)
-            if (patientList != null) {
-                Platform.runLater(() -> {
-                    patientList.reloadQueue();
-              });
-             } 
-            showAlert(Alert.AlertType.INFORMATION, "접수 완료", "환자가 접수되었습니다."); }
-            
-            catch (Exception ex) {
-            showAlert(Alert.AlertType.ERROR, "접수 실패", "DB 오류: " + ex.getMessage());
-        }
+            if (result) {
+                // UI 갱신 (JavaFX Application Thread 보장)
+                if (patientList != null) {
+                    Platform.runLater(() -> patientList.reloadQueue());
+                }
+                showAlert(Alert.AlertType.INFORMATION, "접수 완료", "환자가 접수되었습니다.");
+            } else {
+                showAlert(Alert.AlertType.WARNING, "중복 접수", "해당 환자는 이미 오늘 접수된 상태입니다.");
+            }
+        }catch (Exception ex) {
+            	showAlert(Alert.AlertType.ERROR, "접수 실패", "DB 오류: " + ex.getMessage());
+            }
     }
 
     
